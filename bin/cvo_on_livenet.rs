@@ -13,6 +13,10 @@ use odra::prelude::*;
 use std::str::FromStr;
 
 fn main() {
+    let _ = env_logger::Builder::from_env(
+        env_logger::Env::default().default_filter_or("info"),
+    )
+    .try_init();
     let env = odra_casper_livenet_env::env();
     let owner = env.caller();
     println!("Deployer / owner address: {}", owner.to_string());
@@ -49,7 +53,7 @@ fn main() {
 
 /// Deploys a fresh YieldOracle contract.
 pub fn deploy_oracle(env: &HostEnv) -> YieldOracleHostRef {
-    env.set_gas(300_000_000_000u64);
+    env.set_gas(200_000_000_000u64);
     YieldOracle::deploy(env, NoArgs)
 }
 

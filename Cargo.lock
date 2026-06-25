@@ -532,6 +532,7 @@ dependencies = [
 name = "casper_yield_oracle"
 version = "0.1.0"
 dependencies = [
+ "env_logger",
  "odra",
  "odra-build",
  "odra-casper-livenet-env",

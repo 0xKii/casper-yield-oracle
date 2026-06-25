@@ -14,3 +14,7 @@ agent/node_modules/
 # Keys / secrets
 keys/
 *.pem
+.keygen-venv/
+target/
+*.raw.wasm
+*.raw2.wasm

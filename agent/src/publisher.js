@@ -18,11 +18,11 @@ function hasCasperClient() {
 // Build the session-args for the publish entrypoint.
 function publishArgs({ poolId, apy_bps, risk_bps, confidence_bps, rationale }) {
   return [
-    `pool_id:String='${poolId}'`,
+    `pool_id:string='${poolId}'`,
     `apy_bps:u32='${apy_bps}'`,
     `risk_bps:u32='${risk_bps}'`,
     `confidence_bps:u32='${confidence_bps}'`,
-    `rationale:String='${rationale.replace(/'/g, "")}'`,
+    `rationale:string='${rationale.replace(/'/g, "")}'`,
   ];
 }
 
@@ -31,23 +31,24 @@ export function publishAttestation(att, cfg) {
     nodeUrl,
     chainName,
     secretKeyPath,
-    contractHash,
+    packageHash,
     gas,
+    gasPriceTolerance,
   } = cfg;
 
   const args = publishArgs(att);
 
   const dryRun =
     !hasCasperClient() ||
-    !contractHash ||
+    !packageHash ||
     !secretKeyPath ||
     !existsSync(secretKeyPath);
 
   if (dryRun) {
     return {
       dryRun: true,
-      reason: !contractHash
-        ? "no CVO_CONTRACT_HASH"
+      reason: !packageHash
+        ? "no CVO_PACKAGE_HASH"
         : !hasCasperClient()
         ? "casper-client not installed"
         : "secret key missing",
@@ -55,16 +56,20 @@ export function publishAttestation(att, cfg) {
     };
   }
 
-  // Use put-txn (Casper 2.0) to call a stored contract by hash.
+  // Casper 2.x: call a stored contract through its package address using
+  // `classic` pricing (the testnet node rejects the `fixed` pricing mode).
   const cliArgs = [
-    "put-txn",
-    "invocable-entity",
+    "put-transaction",
+    "package",
     "--node-address", nodeUrl,
     "--chain-name", chainName,
     "--secret-key", secretKeyPath,
-    "--payment-amount", String(gas),
-    "--entity-address", contractHash,
+    "--package-address", packageHash,
     "--session-entry-point", "publish",
+    "--pricing-mode", "classic",
+    "--payment-amount", String(gas),
+    "--standard-payment", "true",
+    "--gas-price-tolerance", String(gasPriceTolerance || 1),
   ];
   for (const a of args) cliArgs.push("--session-arg", a);
 
@@ -75,8 +80,9 @@ export function publishAttestation(att, cfg) {
   let deployHash = null;
   try {
     const parsed = JSON.parse(r.stdout);
+    const th = parsed?.result?.transaction_hash;
     deployHash =
-      parsed?.result?.transaction_hash ||
+      (th && (th.Version1 || th.Version2 || th)) ||
       parsed?.result?.deploy_hash ||
       null;
   } catch {

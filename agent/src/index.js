@@ -14,11 +14,12 @@ const SCORE_ONLY = args.has("--score-only");
 const PREFER_HEURISTIC = args.has("--heuristic");
 
 const cfg = {
-  nodeUrl: process.env.CASPER_NODE_URL || "https://node.testnet.cspr.cloud",
+  nodeUrl: process.env.CASPER_NODE_URL || "https://node.testnet.casper.network",
   chainName: process.env.CASPER_CHAIN_NAME || "casper-test",
   secretKeyPath: process.env.CASPER_SECRET_KEY_PATH,
-  contractHash: process.env.CVO_CONTRACT_HASH,
-  gas: process.env.CVO_PUBLISH_GAS || "3000000000",
+  packageHash: process.env.CVO_PACKAGE_HASH,
+  gas: process.env.CVO_PUBLISH_GAS || "5000000000",
+  gasPriceTolerance: process.env.CASPER_GAS_PRICE_TOLERANCE || "1",
 };
 
 const log = (...a) => console.log(new Date().toISOString(), ...a);
