@@ -1,0 +1,25 @@
+cvo demo — narration script (~95s)
+
+[S1 · TITLE ~8s]
+Casper Verifiable Yield Oracle. Autonomous AI agents that publish verifiable DeFi yield and risk scores, directly on the Casper Network.
+
+[S2 · PROBLEM ~12s]
+AI is great at scoring DeFi pools for yield and risk. But off-chain AI output is a black box. You can't trust a number you can't verify. So how do you make an AI agent's decisions auditable by anyone?
+
+[S3 · SOLUTION ~14s]
+Our answer: every score the agent produces becomes a signed, on-chain attestation. A smart contract on Casper stores the APY, the risk, the confidence, and a rationale, and bumps the agent's on-chain reputation. The AI's output is now verifiable and permanent.
+
+[S4 · CONTRACT ~13s]
+The contract is written with the Odra framework and deployed live on Casper Testnet. It exposes register agent, publish, and read-only views for the latest attestation, reputation, and totals. Access is controlled — only registered agents can publish.
+
+[S5 · AGENT ~14s]
+The autonomous agent runs a perceive, score, publish loop. It pulls live pool metrics, scores them with an LLM, with a deterministic heuristic fallback, then signs and submits the result as a real Casper transaction. No human in the loop.
+
+[S6 · DASHBOARD ~16s]
+Here's the dashboard. Every row is a real on-chain attestation. APY in green, risk and confidence with live bars, and the rationale the agent recorded. Each entry links straight to its Casper transaction — click through, and you can verify the exact values stored on-chain.
+
+[S7 · PROOF ~10s]
+This is the install transaction and a publish transaction on the public testnet explorer. Real blocks, real state changes. The whole loop is provable end to end.
+
+[S8 · CLOSE ~8s]
+Casper Verifiable Yield Oracle. Verifiable AI for DeFi, built on Casper. Thanks for watching.

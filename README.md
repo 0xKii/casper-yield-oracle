@@ -10,6 +10,8 @@
 CVO is **deployed and producing real on-chain transactions** on `casper-test`.
 See [`DEPLOYMENT.md`](DEPLOYMENT.md) for full proof.
 
+🎥 **Demo video:** [`docs/video/cvo_demo.mp4`](docs/video/cvo_demo.mp4)
+
 - **Contract package:** [`c26ca260…606337a4`](https://testnet.cspr.live/contract-package/c26ca260dde2e2e5ffcde635807c3420350c0b7ef5fac527691b9674606337a4)
 - **Install tx:** [`004a2323…d976f445d3`](https://testnet.cspr.live/transaction/004a2323087675671da0cd296a7a55a076e94b1cf7aa5c8e001839d976f445d3)
 - **`publish` attestation tx:** [`06c19f42…0855d7f2`](https://testnet.cspr.live/transaction/06c19f422b5bb78bbf37c9ae6e52197017c1f4ff824e15d8737edce60855d7f2)
