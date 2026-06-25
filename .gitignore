@@ -1,0 +1,16 @@
+.idea
+.vscode
+/target
+.backend*
+.builder*
+
+# Node
+agent/node_modules/
+**/.env
+*.env
+!.env.sample
+!**/.env.sample
+
+# Keys / secrets
+keys/
+*.pem

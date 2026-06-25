@@ -1,0 +1,16 @@
+{
+  "name": "cvo-agent",
+  "version": "0.1.0",
+  "description": "Autonomous yield/risk oracle agent for the Casper Verifiable Yield Oracle",
+  "type": "module",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "once": "node src/index.js --once",
+    "score-only": "node src/index.js --score-only"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "dotenv": "^16.4.5"
+  }
+}

@@ -1,0 +1,268 @@
+{
+  "casper_contract_schema_version": 1,
+  "toolchain": "rustc 1.94.0-nightly (8d670b93d 2025-12-31)",
+  "authors": [
+    "CVO Team"
+  ],
+  "repository": null,
+  "homepage": null,
+  "contract_name": "YieldOracle",
+  "contract_version": "0.1.0",
+  "types": [
+    {
+      "struct": {
+        "name": "Attestation",
+        "description": null,
+        "members": [
+          {
+            "name": "agent",
+            "description": null,
+            "ty": "Key"
+          },
+          {
+            "name": "pool_id",
+            "description": null,
+            "ty": "String"
+          },
+          {
+            "name": "apy_bps",
+            "description": null,
+            "ty": "U32"
+          },
+          {
+            "name": "risk_bps",
+            "description": null,
+            "ty": "U32"
+          },
+          {
+            "name": "confidence_bps",
+            "description": null,
+            "ty": "U32"
+          },
+          {
+            "name": "rationale",
+            "description": null,
+            "ty": "String"
+          },
+          {
+            "name": "seq",
+            "description": null,
+            "ty": "U64"
+          }
+        ]
+      }
+    }
+  ],
+  "errors": [],
+  "entry_points": [
+    {
+      "name": "register_agent",
+      "description": "Register a new oracle agent. Owner only.",
+      "is_mutable": true,
+      "arguments": [
+        {
+          "name": "agent",
+          "description": null,
+          "ty": "Key",
+          "optional": false
+        },
+        {
+          "name": "label",
+          "description": null,
+          "ty": "String",
+          "optional": false
+        }
+      ],
+      "return_ty": "Unit",
+      "is_contract_context": true,
+      "access": "public"
+    },
+    {
+      "name": "revoke_agent",
+      "description": "Revoke an agent's registration. Owner only.",
+      "is_mutable": true,
+      "arguments": [
+        {
+          "name": "agent",
+          "description": null,
+          "ty": "Key",
+          "optional": false
+        }
+      ],
+      "return_ty": "Unit",
+      "is_contract_context": true,
+      "access": "public"
+    },
+    {
+      "name": "publish",
+      "description": "Publish a yield/risk attestation for a pool. Registered agents only.",
+      "is_mutable": true,
+      "arguments": [
+        {
+          "name": "pool_id",
+          "description": null,
+          "ty": "String",
+          "optional": false
+        },
+        {
+          "name": "apy_bps",
+          "description": null,
+          "ty": "U32",
+          "optional": false
+        },
+        {
+          "name": "risk_bps",
+          "description": null,
+          "ty": "U32",
+          "optional": false
+        },
+        {
+          "name": "confidence_bps",
+          "description": null,
+          "ty": "U32",
+          "optional": false
+        },
+        {
+          "name": "rationale",
+          "description": null,
+          "ty": "String",
+          "optional": false
+        }
+      ],
+      "return_ty": "Unit",
+      "is_contract_context": true,
+      "access": "public"
+    },
+    {
+      "name": "is_agent",
+      "description": "Returns whether an address is a registered agent.",
+      "is_mutable": false,
+      "arguments": [
+        {
+          "name": "agent",
+          "description": null,
+          "ty": "Key",
+          "optional": false
+        }
+      ],
+      "return_ty": "Bool",
+      "is_contract_context": true,
+      "access": "public"
+    },
+    {
+      "name": "reputation_of",
+      "description": "Returns an agent's reputation (count of accepted attestations).",
+      "is_mutable": false,
+      "arguments": [
+        {
+          "name": "agent",
+          "description": null,
+          "ty": "Key",
+          "optional": false
+        }
+      ],
+      "return_ty": "U64",
+      "is_contract_context": true,
+      "access": "public"
+    },
+    {
+      "name": "latest_attestation",
+      "description": "Returns the latest attestation for a pool, reverting if none exists.",
+      "is_mutable": false,
+      "arguments": [
+        {
+          "name": "pool_id",
+          "description": null,
+          "ty": "String",
+          "optional": false
+        }
+      ],
+      "return_ty": "Attestation",
+      "is_contract_context": true,
+      "access": "public"
+    },
+    {
+      "name": "pool_sequence",
+      "description": "Returns the number of attestations recorded for a pool.",
+      "is_mutable": false,
+      "arguments": [
+        {
+          "name": "pool_id",
+          "description": null,
+          "ty": "String",
+          "optional": false
+        }
+      ],
+      "return_ty": "U64",
+      "is_contract_context": true,
+      "access": "public"
+    },
+    {
+      "name": "total",
+      "description": "Returns the total number of attestations across all pools.",
+      "is_mutable": false,
+      "arguments": [],
+      "return_ty": "U64",
+      "is_contract_context": true,
+      "access": "public"
+    },
+    {
+      "name": "pool_count",
+      "description": "Returns the number of distinct pools tracked.",
+      "is_mutable": false,
+      "arguments": [],
+      "return_ty": "U32",
+      "is_contract_context": true,
+      "access": "public"
+    },
+    {
+      "name": "pool_at",
+      "description": "Returns the pool id at a given index (for enumeration).",
+      "is_mutable": false,
+      "arguments": [
+        {
+          "name": "index",
+          "description": null,
+          "ty": "U32",
+          "optional": false
+        }
+      ],
+      "return_ty": {
+        "Option": "String"
+      },
+      "is_contract_context": true,
+      "access": "public"
+    }
+  ],
+  "events": [],
+  "call": {
+    "wasm_file_name": "YieldOracle.wasm",
+    "description": "Initialize the contract; deployer becomes the owner.",
+    "arguments": [
+      {
+        "name": "odra_cfg_package_hash_key_name",
+        "description": "The arg name for the package hash key name.",
+        "ty": "String",
+        "optional": false
+      },
+      {
+        "name": "odra_cfg_allow_key_override",
+        "description": "If true and the key specified in odra_cfg_package_hash_key_name already exists, it will be overwritten.",
+        "ty": "Bool",
+        "optional": false
+      },
+      {
+        "name": "odra_cfg_is_upgradable",
+        "description": "The arg name for the contract upgradeability setting.",
+        "ty": "Bool",
+        "optional": false
+      },
+      {
+        "name": "odra_cfg_is_upgrade",
+        "description": "The arg name for telling the installer that the contract is being upgraded.",
+        "ty": "Bool",
+        "optional": false
+      }
+    ]
+  }
+}
