@@ -1,0 +1,50 @@
+{
+  "contract": "package-c26ca260dde2e2e5ffcde635807c3420350c0b7ef5fac527691b9674606337a4",
+  "updatedAt": "2026-06-25T02:33:00.632Z",
+  "attestations": [
+    {
+      "poolId": "USDC-DAI",
+      "apy_bps": 1714,
+      "risk_bps": 3162,
+      "confidence_bps": 9995,
+      "rationale": "heuristic vol34.46% depth0.999",
+      "source": "heuristic",
+      "tx": "a10b063ab27d42a0ee9d223569633f8b6d0734db5a523491fe650d30f406b04e",
+      "explorer": "https://testnet.cspr.live/transaction/a10b063ab27d42a0ee9d223569633f8b6d0734db5a523491fe650d30f406b04e",
+      "publishedAt": "2026-06-25T02:33:00.632Z"
+    },
+    {
+      "poolId": "CSPR-ETH",
+      "apy_bps": 2660,
+      "risk_bps": 1902,
+      "confidence_bps": 9744,
+      "rationale": "heuristic vol19.87% depth0.973",
+      "source": "heuristic",
+      "tx": "aaf63adcf999a4d18d04d3e03e961fbff2ff386fd6b9d6c303157bdc5ad13f61",
+      "explorer": "https://testnet.cspr.live/transaction/aaf63adcf999a4d18d04d3e03e961fbff2ff386fd6b9d6c303157bdc5ad13f61",
+      "publishedAt": "2026-06-25T02:32:59.944Z"
+    },
+    {
+      "poolId": "CSPR-USDC",
+      "apy_bps": 3932,
+      "risk_bps": 3958,
+      "confidence_bps": 4657,
+      "rationale": "heuristic vol12.06% depth0.716",
+      "source": "heuristic",
+      "tx": "eb51e38a9698943d4ccbc9dceef846aa8e15b52a43e9d20f24aaea319cc5085e",
+      "explorer": "https://testnet.cspr.live/transaction/eb51e38a9698943d4ccbc9dceef846aa8e15b52a43e9d20f24aaea319cc5085e",
+      "publishedAt": "2026-06-25T02:32:59.264Z"
+    },
+    {
+      "poolId": "CSPR-USDC-demo-pool",
+      "apy_bps": 1875,
+      "risk_bps": 4200,
+      "confidence_bps": 8800,
+      "rationale": "ai-score:v1 depth-ok vol-moderate",
+      "source": "genesis",
+      "tx": "06c19f422b5bb78bbf37c9ae6e52197017c1f4ff824e15d8737edce60855d7f2",
+      "explorer": "https://testnet.cspr.live/transaction/06c19f422b5bb78bbf37c9ae6e52197017c1f4ff824e15d8737edce60855d7f2",
+      "publishedAt": "2026-06-25T02:18:00.000Z"
+    }
+  ]
+}

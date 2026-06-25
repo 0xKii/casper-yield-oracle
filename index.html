@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Casper Verifiable Yield Oracle</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<style>
+  :root {
+    --bg: #0a0e14;
+    --bg-soft: #111722;
+    --card: #151c28;
+    --line: #1f2937;
+    --text: #e6edf3;
+    --muted: #8b97a7;
+    --accent: #ff3b30;      /* Casper red */
+    --accent-soft: #ff5a4d;
+    --green: #2ec27e;
+    --amber: #f0b429;
+    --blue: #4c9aff;
+    --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: radial-gradient(1200px 600px at 80% -10%, #1a2433 0%, var(--bg) 55%);
+    color: var(--text);
+    line-height: 1.5;
+    min-height: 100vh;
+  }
+  a { color: var(--blue); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 32px 20px 80px; }
+
+  header.hero { display: flex; align-items: center; gap: 16px; margin-bottom: 8px; }
+  .logo {
+    width: 44px; height: 44px; border-radius: 12px; flex: none;
+    background: linear-gradient(135deg, var(--accent), var(--accent-soft));
+    display: grid; place-items: center; font-weight: 800; font-size: 22px; color: #fff;
+    box-shadow: 0 6px 20px rgba(255,59,48,.35);
+  }
+  h1 { font-size: 26px; margin: 0; letter-spacing: -.02em; }
+  .sub { color: var(--muted); font-size: 14px; margin-top: 2px; }
+  .badges { margin: 18px 0 26px; display: flex; flex-wrap: wrap; gap: 8px; }
+  .badge {
+    font-size: 12px; padding: 5px 11px; border-radius: 999px;
+    background: var(--bg-soft); border: 1px solid var(--line); color: var(--muted);
+  }
+  .badge.live { color: var(--green); border-color: rgba(46,194,126,.4); }
+  .badge.live::before { content: "●"; margin-right: 6px; color: var(--green); }
+
+  .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 26px; }
+  .stat { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 16px 18px; }
+  .stat .k { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: .06em; }
+  .stat .v { font-size: 24px; font-weight: 700; margin-top: 6px; }
+
+  .section-title { font-size: 13px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin: 28px 0 12px; }
+
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 16px; overflow: hidden; }
+  .att { padding: 18px 20px; border-bottom: 1px solid var(--line); }
+  .att:last-child { border-bottom: none; }
+  .att-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+  .pool { font-weight: 700; font-size: 17px; }
+  .seq { color: var(--muted); font-size: 12px; font-family: var(--mono); }
+  .metrics { display: flex; gap: 22px; margin: 12px 0 10px; flex-wrap: wrap; }
+  .metric .lbl { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
+  .metric .val { font-size: 20px; font-weight: 700; }
+  .val.apy { color: var(--green); }
+  .val.risk { color: var(--amber); }
+  .val.conf { color: var(--blue); }
+  .bar { height: 6px; border-radius: 4px; background: var(--bg-soft); overflow: hidden; margin-top: 6px; width: 120px; }
+  .bar > span { display: block; height: 100%; }
+  .rationale { color: var(--muted); font-size: 13px; font-style: italic; margin-top: 4px; }
+  .att-foot { display: flex; align-items: center; gap: 14px; margin-top: 12px; font-size: 12px; color: var(--muted); }
+  .verified { color: var(--green); font-weight: 600; }
+  .tx { font-family: var(--mono); }
+  .empty { padding: 40px; text-align: center; color: var(--muted); }
+  footer { margin-top: 40px; color: var(--muted); font-size: 13px; text-align: center; }
+  .pill { font-family: var(--mono); font-size: 12px; background: var(--bg-soft); padding: 3px 8px; border-radius: 6px; border: 1px solid var(--line); }
+  @media (max-width: 720px) { .stats { grid-template-columns: repeat(2, 1fr); } }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="hero">
+      <div class="logo">◎</div>
+      <div>
+        <h1>Casper Verifiable Yield Oracle</h1>
+        <div class="sub">Autonomous AI agents publishing verifiable DeFi yield &amp; risk scores on Casper</div>
+      </div>
+    </header>
+
+    <div class="badges">
+      <span class="badge live">Live on Casper Testnet</span>
+      <span class="badge" id="net-badge">casper-test</span>
+      <a class="badge" id="contract-badge" target="_blank" rel="noopener">contract: …</a>
+      <a class="badge" href="https://github.com/0xKii/casper-yield-oracle" target="_blank" rel="noopener">GitHub repo</a>
+    </div>
+
+    <div class="stats">
+      <div class="stat"><div class="k">Attestations</div><div class="v" id="s-total">—</div></div>
+      <div class="stat"><div class="k">Pools tracked</div><div class="v" id="s-pools">—</div></div>
+      <div class="stat"><div class="k">Avg confidence</div><div class="v" id="s-conf">—</div></div>
+      <div class="stat"><div class="k">Last update</div><div class="v" id="s-updated" style="font-size:15px">—</div></div>
+    </div>
+
+    <div class="section-title">On-chain attestation feed — every entry links to its Casper transaction</div>
+    <div class="card" id="feed"><div class="empty">Loading on-chain attestations…</div></div>
+
+    <footer>
+      Each <span class="pill">publish</span> is a real, signed Casper transaction.
+      The AI's output is auditable by anyone — open the tx to verify the exact APY, risk,
+      confidence and rationale stored on-chain. &nbsp;·&nbsp; Built for the Casper Agentic Buildathon 2026.
+    </footer>
+  </div>
+
+<script>
+const EXPLORER_TX = "https://testnet.cspr.live/transaction/";
+const EXPLORER_PKG = "https://testnet.cspr.live/contract-package/";
+
+function pct(bps) { return (bps / 100).toFixed(2) + "%"; }
+function shortTx(h) { return h ? h.slice(0, 8) + "…" + h.slice(-6) : "pending"; }
+function ago(iso) {
+  if (!iso) return "—";
+  const s = Math.floor((Date.now() - new Date(iso).getTime()) / 1000);
+  if (s < 60) return s + "s ago";
+  if (s < 3600) return Math.floor(s / 60) + "m ago";
+  if (s < 86400) return Math.floor(s / 3600) + "h ago";
+  return Math.floor(s / 86400) + "d ago";
+}
+function riskColor(bps) {
+  if (bps < 3500) return "var(--green)";
+  if (bps < 6500) return "var(--amber)";
+  return "var(--accent)";
+}
+
+function render(data) {
+  const atts = data.attestations || [];
+  const pkg = (data.contract || "").replace(/^(hash-|package-)/, "");
+  const cb = document.getElementById("contract-badge");
+  if (pkg) { cb.textContent = "contract: " + pkg.slice(0, 8) + "…"; cb.href = EXPLORER_PKG + pkg; }
+
+  document.getElementById("s-total").textContent = atts.length;
+  const pools = new Set(atts.map(a => a.poolId));
+  document.getElementById("s-pools").textContent = pools.size;
+  const avgConf = atts.length ? Math.round(atts.reduce((s, a) => s + a.confidence_bps, 0) / atts.length) : 0;
+  document.getElementById("s-conf").textContent = atts.length ? pct(avgConf) : "—";
+  document.getElementById("s-updated").textContent = ago(data.updatedAt);
+
+  const feed = document.getElementById("feed");
+  if (!atts.length) { feed.innerHTML = '<div class="empty">No attestations yet — the agent will publish on its next cycle.</div>'; return; }
+
+  feed.innerHTML = atts.map(a => `
+    <div class="att">
+      <div class="att-top">
+        <span class="pool">${a.poolId}</span>
+        <span class="seq">${a.source ? "["+a.source+"]" : ""} ${new Date(a.publishedAt).toLocaleString()}</span>
+      </div>
+      <div class="metrics">
+        <div class="metric">
+          <div class="lbl">Est. APY</div>
+          <div class="val apy">${pct(a.apy_bps)}</div>
+        </div>
+        <div class="metric">
+          <div class="lbl">Risk</div>
+          <div class="val risk">${pct(a.risk_bps)}</div>
+          <div class="bar"><span style="width:${Math.min(100, a.risk_bps/100)}%;background:${riskColor(a.risk_bps)}"></span></div>
+        </div>
+        <div class="metric">
+          <div class="lbl">Confidence</div>
+          <div class="val conf">${pct(a.confidence_bps)}</div>
+          <div class="bar"><span style="width:${Math.min(100, a.confidence_bps/100)}%;background:var(--blue)"></span></div>
+        </div>
+      </div>
+      ${a.rationale ? `<div class="rationale">“${a.rationale}”</div>` : ""}
+      <div class="att-foot">
+        ${a.tx
+          ? `<span class="verified">✓ Verified on-chain</span> <a class="tx" href="${a.explorer || (EXPLORER_TX + a.tx)}" target="_blank" rel="noopener">${shortTx(a.tx)} ↗</a>`
+          : `<span>tx pending</span>`}
+      </div>
+    </div>
+  `).join("");
+}
+
+async function load() {
+  try {
+    const r = await fetch("ledger.json?t=" + Date.now());
+    if (!r.ok) throw new Error("no ledger");
+    render(await r.json());
+  } catch (e) {
+    document.getElementById("feed").innerHTML =
+      '<div class="empty">Could not load ledger.json. Run the agent to populate it.</div>';
+  }
+}
+load();
+setInterval(load, 15000);
+</script>
+</body>
+</html>
