@@ -4,6 +4,8 @@
 // on-chain attestation). Runs once with --once, or loops on an interval.
 
 import "dotenv/config";
+import { writeFileSync, readFileSync, existsSync, mkdirSync } from "node:fs";
+import { dirname } from "node:path";
 import { fetchPoolMetrics } from "./pools.js";
 import { scorePool } from "./scorer.js";
 import { publishAttestation } from "./publisher.js";
@@ -21,6 +23,28 @@ const cfg = {
   gas: process.env.CVO_PUBLISH_GAS || "5000000000",
   gasPriceTolerance: process.env.CASPER_GAS_PRICE_TOLERANCE || "1",
 };
+
+// Where the agent records every on-chain publish so the web dashboard can
+// render a verifiable, transaction-linked feed.
+const LEDGER_PATH = process.env.CVO_LEDGER_PATH || "../frontend/ledger.json";
+const EXPLORER = "https://testnet.cspr.live/transaction/";
+
+function appendToLedger(entry) {
+  try {
+    mkdirSync(dirname(LEDGER_PATH), { recursive: true });
+    let data = { contract: cfg.packageHash || null, attestations: [] };
+    if (existsSync(LEDGER_PATH)) {
+      data = JSON.parse(readFileSync(LEDGER_PATH, "utf8"));
+    }
+    data.contract = cfg.packageHash || data.contract;
+    data.updatedAt = new Date().toISOString();
+    data.attestations.unshift(entry);
+    data.attestations = data.attestations.slice(0, 200);
+    writeFileSync(LEDGER_PATH, JSON.stringify(data, null, 2));
+  } catch (e) {
+    log("ledger write failed:", e.message);
+  }
+}
 
 const log = (...a) => console.log(new Date().toISOString(), ...a);
 
@@ -49,6 +73,13 @@ async function runCycle() {
       log(`  DRY-RUN (${res.reason}) would publish:`, JSON.stringify(res.wouldSend.args));
     } else if (res.ok) {
       log(`  published on-chain, tx=${res.deployHash || "(see raw)"}`);
+      appendToLedger({
+        ...att,
+        source: score.source,
+        tx: res.deployHash || null,
+        explorer: res.deployHash ? EXPLORER + res.deployHash : null,
+        publishedAt: new Date().toISOString(),
+      });
     } else {
       log(`  publish FAILED: ${res.error}`);
     }

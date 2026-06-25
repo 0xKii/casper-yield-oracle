@@ -14,6 +14,13 @@ See [`DEPLOYMENT.md`](DEPLOYMENT.md) for full proof.
 - **Install tx:** [`004a2323…d976f445d3`](https://testnet.cspr.live/transaction/004a2323087675671da0cd296a7a55a076e94b1cf7aa5c8e001839d976f445d3)
 - **`publish` attestation tx:** [`06c19f42…0855d7f2`](https://testnet.cspr.live/transaction/06c19f422b5bb78bbf37c9ae6e52197017c1f4ff824e15d8737edce60855d7f2)
 
+### Dashboard
+
+A live, verifiable attestation feed — every row links to its on-chain Casper
+transaction. See [`frontend/`](frontend/).
+
+![CVO dashboard](docs/assets/dashboard.png)
+
 
 ## What it is
 
@@ -101,8 +108,10 @@ casper-yield-oracle/
 │   ├── cli.rs              # odra-cli: deploy + publish scenario
 │   └── cvo_on_livenet.rs   # testnet deploy + exercise script
 ├── agent/                  # autonomous off-chain oracle agent (Node.js)
+├── frontend/               # zero-dep dashboard (on-chain attestation feed)
 ├── scripts/                # helper scripts (faucet, deploy)
 ├── docs/                   # architecture, demo script
+├── DEPLOYMENT.md           # live testnet addresses + proof transactions
 ├── Cargo.toml
 ├── Odra.toml
 └── README.md
